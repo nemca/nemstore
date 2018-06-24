@@ -16,6 +16,9 @@ You must create config file:
 # Set directory to store files
 StorageDir: /Users/mbr/Dropbox/nemstorege
 ```
+
+`nemstore` use `EDITOR` environment variable. Please add it to your shell profile.
+
 Show help:
 ```
 ➜  nemstore
