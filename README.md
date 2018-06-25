@@ -32,6 +32,7 @@ Available Commands:
   create      Create new encrypted file
   edit        Edit encrypted file
   help        Help about any command
+  less        Open file in `less` pager
   ls          List of stored files
   rm          Remove encrypted file
   version     Show the version number
