@@ -15,8 +15,8 @@
 package storage
 
 import (
+	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 )
@@ -26,7 +26,7 @@ func RunEditor(tmpFile *os.File) ([]byte, error) {
 	editor := os.Getenv("EDITOR")
 	editorPath, err := exec.LookPath(editor)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	editorCmd := exec.Command(editorPath, tmpFile.Name())
@@ -35,11 +35,11 @@ func RunEditor(tmpFile *os.File) ([]byte, error) {
 	editorCmd.Stderr = os.Stderr
 	err = editorCmd.Start()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	err = editorCmd.Wait()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	data, err := ioutil.ReadFile(tmpFile.Name())
@@ -48,6 +48,29 @@ func RunEditor(tmpFile *os.File) ([]byte, error) {
 	}
 
 	return data, err
+}
+
+// RunLess run `less` command with file
+func RunLess(input io.Reader) error {
+	lessPath, err := exec.LookPath("less")
+	if err != nil {
+		return err
+	}
+
+	lessCmd := exec.Command(lessPath)
+	lessCmd.Stdin = input
+	lessCmd.Stdout = os.Stdout
+	lessCmd.Stderr = os.Stderr
+	err = lessCmd.Start()
+	if err != nil {
+		return err
+	}
+	err = lessCmd.Wait()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // CreateTempFile create new temporary file
